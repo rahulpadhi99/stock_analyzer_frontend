@@ -1,0 +1,28 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+.input {
+  width: 450px;
+  height: 45px;
+  font-size: 20px;
+  padding: 10px;
+}
+.login-button-container {
+  width: 470px;
+  height: 45px;
+  font-size: 20px;
+  display: flex;
+  justify-content: end;
+}
+.login-button {
+  width: 30%;
+  padding: 10px 25px;
+  background-color: #7b68ee;
+  color: #fff;
+  border: none;
+}

@@ -1,0 +1,20 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  place-content: center;
+  align-items: center;
+  min-height: 50vh;
+  justify-content: center;
+}
+.watchlist-button,
+.myprofile-button,
+.search-button,
+.journal-button {
+  background-color: #7b68ee;
+  color: #fff;
+  padding: 10px 25px;
+  border: none;
+  width: 220px;
+  height: 45px;
+}

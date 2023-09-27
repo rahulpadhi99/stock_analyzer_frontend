@@ -1,0 +1,16 @@
+.layout-container {
+}
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+}
+.home-button,
+.logout-button {
+  background-color: #7b68ee;
+  color: #fff;
+  padding: 10px 25px;
+  border: none;
+  width: 120px;
+  height: 45px;
+}

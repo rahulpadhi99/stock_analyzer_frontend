@@ -1,0 +1,66 @@
+.watchlist-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.select {
+  width: 300px;
+  height: 45px;
+  font-size: 20px;
+}
+.select option {
+  font-size: 20px;
+}
+.add-watchlist-container {
+  display: flex;
+  align-items: center;
+}
+.watchlist-input-container{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  justify-content: end;
+}
+.watchlist-input {
+  width: 300px;
+  height: 43px;
+  padding: 0px 10px;
+}
+.save-button {
+  width: 100px;
+  height: 45px;
+  font-size: 18px;
+  background-color: #7b68ee;
+  color: #fff;
+  border: none;
+}
+.add-symbol-container {
+  display: flex;
+  gap: 25px;
+}
+.add-symbol-button {
+  min-width: 100px;
+  height: 45px;
+  font-size: 18px;
+  padding: 0 10px;
+  background-color: #fff;
+  color: #7b68ee;
+  border: 1px solid #7b68ee;
+}
+.delete-wathclist-button {
+  min-width: 100px;
+  height: 45px;
+  font-size: 18px;
+  padding: 0 10px;
+  background-color: #fff;
+  color: red;
+  border: 1px solid red;
+}
