@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router";
 import "./layout.css";
+import { Box, Button } from "@mui/material";
 
 const Layout = (props) => {
   const { children } = props;
@@ -11,35 +12,35 @@ const Layout = (props) => {
   };
 
   return (
-    <div>
-      <div className="layout-container">
+    <Box>
+      <Box className="layout-container">
         {!["/", "/login"]?.includes(pathname) && (
-          <div className="header-container">
-            <div>
-              <button
-                className="home-button"
+          <Box className="header-container">
+            <Box>
+              <Button
+                className="button"
                 onClick={() => {
                   navigate("/home");
                 }}
               >
                 Home
-              </button>
-            </div>
-            <div>
-              <button
-                className="logout-button"
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                className="button"
                 onClick={() => {
                   navigate("/login");
                 }}
               >
                 Logout
-              </button>
-            </div>
-          </div>
+              </Button>
+            </Box>
+          </Box>
         )}
         {children}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 export default Layout;

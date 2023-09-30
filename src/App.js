@@ -1,8 +1,8 @@
+import "../src/global.css";
 import { Routes, Route } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import Login from "./components/Login";
-import "../src/global.css";
 import Home from "./components/Home";
 import Watchlist from "./components/Watchlist";
 import MyProfile from "./components/MyProfile";

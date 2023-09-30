@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import "./login.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,9 +28,11 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h1>{pathname === "/my-profile" ? "My Profile" : "Login"}</h1>
-      <input
+    <Box className="login-container">
+      <Typography variant="h2">
+        {pathname === "/my-profile" ? "My Profile" : "Login"}
+      </Typography>
+      <TextField
         type="text"
         placeholder="UserID"
         value={user?.name}
@@ -37,7 +40,7 @@ const Login = () => {
         className="input"
         onChange={changeHandler}
       />
-      <input
+      <TextField
         type="password"
         placeholder="Password"
         value={user?.password}
@@ -46,7 +49,7 @@ const Login = () => {
         onChange={changeHandler}
       />
       {pathname === "/my-profile" && (
-        <input
+        <TextField
           type="password"
           placeholder="Confirm Password"
           value={user?.password}
@@ -55,12 +58,12 @@ const Login = () => {
           onChange={changeHandler}
         />
       )}
-      <div className="login-button-container">
-        <button onClick={submitHandler} className="login-button">
+      <Box className="login-button-container">
+        <Button onClick={submitHandler} className="button">
           {pathname === "/my-profile" ? "Update" : "Login"}
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
