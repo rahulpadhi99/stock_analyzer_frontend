@@ -118,22 +118,22 @@
   display: flex;
   width: 100%;
   align-items: center;
-  min-height: 45px;
+  /* min-height: 45px; */
 }
 .head-1,
 .content-1 {
   width: 10%;
-  padding: 8px;
+  padding: 4px;
 }
 .head-2,
 .content-2 {
   width: 30%;
-  padding: 8px;
+  padding: 4px;
 }
 .head-3,
 .content-3 {
   width: 60%;
-  padding: 8px;
+  padding: 4px;
 }
 .content {
   display: flex;
@@ -145,6 +145,6 @@
 }
 .content-data {
   display: flex;
-  min-height: 45px;
+  /* min-height: 45px; */
   align-items: center;
 }

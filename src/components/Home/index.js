@@ -1,41 +1,42 @@
+import { Button } from "@mui/material";
 import "./home.css";
 import { useNavigate } from "react-router-dom";
 const Home = () => {
   const navigate = useNavigate();
   return (
     <div className="home-container">
-      <button
-        className="myprofile-button"
+      <Button
+        className="myprofile-button button"
         onClick={() => {
           navigate("/my-profile");
         }}
       >
         My Profile
-      </button>
-      <button
-        className="watchlist-button"
+      </Button>
+      <Button
+        className="watchlist-button button"
         onClick={() => {
           navigate("/watchlist");
         }}
       >
         Watchlist
-      </button>
-      <button
-        className="search-button"
+      </Button>
+      <Button
+        className="search-button button"
         onClick={() => {
           navigate("/search");
         }}
       >
         Search
-      </button>
-      <button
-        className="journal-button"
+      </Button>
+      <Button
+        className="journal-button button"
         onClick={() => {
           navigate("/journal");
         }}
       >
         Journal
-      </button>
+      </Button>
     </div>
   );
 };

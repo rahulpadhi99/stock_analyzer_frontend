@@ -11,10 +11,5 @@
 .myprofile-button,
 .search-button,
 .journal-button {
-  background-color: #7b68ee;
-  color: #fff;
-  padding: 10px 25px;
-  border: none;
   width: 220px;
-  height: 45px;
 }

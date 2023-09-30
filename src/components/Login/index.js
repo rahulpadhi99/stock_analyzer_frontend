@@ -3,24 +3,30 @@ import React, { useState } from "react";
 import "./login.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const [user, setUser] = useState({
-    name: "",
+    userID: "",
     password: "",
     confirmPassword: "",
   });
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (pathname === "/my-profile") {
-      console.log(`Logged`, user);
-    } else {
       console.log(`Updated`, user);
+    } else {
+      const response = await axios.post("http://localhost:8000/auth/login", {
+        userID: user?.userID,
+        password: user?.password,
+      });
+      const userID = response?.data?.userID;
+      localStorage.setItem("loggedUserID", userID);
+      navigate("/home");
     }
-    navigate("/home");
   };
 
   const changeHandler = (e) => {
@@ -36,7 +42,7 @@ const Login = () => {
         type="text"
         placeholder="UserID"
         value={user?.name}
-        name="name"
+        name="userID"
         className="input"
         onChange={changeHandler}
       />

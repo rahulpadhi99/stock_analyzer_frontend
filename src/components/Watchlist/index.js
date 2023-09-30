@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./watchlist.css";
 import {
   Autocomplete,
@@ -7,20 +7,10 @@ import {
   Checkbox,
   Divider,
   FormControl,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import axios from "axios";
 
 const top100Films = [
   { label: "The Shawshank Redemption", year: 1994 },
@@ -31,29 +21,38 @@ const top100Films = [
   { label: "Schindler's List", year: 1993 },
 ];
 
-const columns = [
-  { field: "symbol", headerName: "Symbol", width: 200 },
-  { field: "notes", headerName: "Notes", width: 800 },
-];
-
-const rows = [
-  { id: 1, symbol: "Snow", notes: "Jon" },
-  { id: 2, symbol: "Lannister", notes: "Cersei" },
-  { id: 3, symbol: "Lannister", notes: "Jaime" },
-];
+const userId = localStorage.getItem("loggedUserID");
 
 const Watchlist = () => {
-  const [selectedOption, setSelectedOption] = useState("option1"); // Initial selected option
+  const [addedWatchlist, setAddedWatchlist] = useState("");
+  const [allWatchlist, setAllWatchlist] = useState([]);
 
-  const handleSelectChange = (e) => {
-    setSelectedOption(e.target.value);
+  const getAllWatchlist = async () => {
+    const response = await axios.get(
+      `http://localhost:8000/watchlist?userId=${userId}`
+    );
+    const allWatchlist = response?.data;
+    setAllWatchlist(
+      allWatchlist?.map((list) => ({ label: list?.name, value: list?._id }))
+    );
   };
+
+  const handleSelectChange = (e) => {};
 
   const inputChangeHandler = (e) => {
-    console.log(e.target.value);
+    setAddedWatchlist(e.target.value);
   };
-  const saveWatchlistHandler = () => {
-    console.log("watchlist saved");
+  const saveWatchlistHandler = async () => {
+    const response = await axios.post(
+      "http://localhost:8000/watchlist/add-watchlist",
+      {
+        name: addedWatchlist,
+        userId: userId,
+      }
+    );
+    if (response) {
+      getAllWatchlist();
+    }
   };
   const addSymbolHandler = () => {
     console.log("added symbol");
@@ -77,6 +76,11 @@ const Watchlist = () => {
     console.log("notes updated");
   };
 
+  useEffect(() => {
+    getAllWatchlist();
+  }, []);
+
+  console.log("watchlist", allWatchlist);
   return (
     <Box className="watchlist-container">
       <Box className="action-container">
@@ -85,7 +89,7 @@ const Watchlist = () => {
             <Autocomplete
               disablePortal
               id="combo-box-demo"
-              options={top100Films}
+              options={allWatchlist}
               renderInput={(params) => <TextField {...params} label="Movie" />}
             />
           </FormControl>
@@ -95,6 +99,7 @@ const Watchlist = () => {
               <TextField
                 type="text"
                 placeholder="Add Watchlist"
+                value={addedWatchlist}
                 className="add-watchlist-input"
                 onChange={inputChangeHandler}
               />
