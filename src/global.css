@@ -11,3 +11,6 @@
 .MuiAutocomplete-inputRoot {
   padding: 2px 39px 7px 9px !important;
 }
+.apexcharts-point-annotation-marker   {
+  display: none;
+}

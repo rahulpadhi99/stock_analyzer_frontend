@@ -8,6 +8,8 @@ import Watchlist from "./components/Watchlist";
 import MyProfile from "./components/MyProfile";
 import Search from "./components/Search";
 import Journal from "./components/Journal";
+import DisplayCharts from "./components/DisplayCharts";
+
 function App() {
   return (
     <BrowserRouter>
@@ -18,6 +20,7 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/my-profile" element={<MyProfile />} />
           <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/display-charts" element={<DisplayCharts />} />
           <Route path="/search" element={<Search />} />
           <Route path="/journal" element={<Journal />} />
         </Routes>

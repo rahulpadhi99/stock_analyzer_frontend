@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./watchlist.css";
 import {
   Autocomplete,
@@ -17,6 +19,7 @@ const SYMBOL_OPTIONS = ["RIL", "ADI"];
 const userId = localStorage.getItem("loggedUserID");
 
 const Watchlist = () => {
+  const navigate = useNavigate();
   const [addedWatchlist, setAddedWatchlist] = useState("");
   const [allWatchlist, setAllWatchlist] = useState([]);
   const [selectedWatchlist, setSelectedWatchlist] = useState({
@@ -47,7 +50,6 @@ const Watchlist = () => {
   };
 
   const handleSymbolSelectHandler = (event, value) => {
-    console.log("value", value);
     setSelectedSymbol(value);
   };
   const inputChangeHandler = (e) => {
@@ -144,7 +146,7 @@ const Watchlist = () => {
     console.log("removed Symbol");
   };
   const displayChartsHandler = () => {
-    console.log("chart displayed");
+    navigate("/display-charts");
   };
 
   const updateNotesHandler = async (symbolId) => {
