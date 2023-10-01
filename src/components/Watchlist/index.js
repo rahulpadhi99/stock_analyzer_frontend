@@ -12,10 +12,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const SYMBOL_OPTIONS = [
-  { label: "RIL", value: "RIL" },
-  { label: "ADI", value: "ADI" },
-];
+const SYMBOL_OPTIONS = ["RIL", "ADI"];
 
 const userId = localStorage.getItem("loggedUserID");
 
@@ -26,10 +23,7 @@ const Watchlist = () => {
     label: "",
     value: "",
   });
-  const [selectedSymbol, setSelectedSymbol] = useState({
-    label: "",
-    value: "",
-  });
+  const [selectedSymbol, setSelectedSymbol] = useState([]);
   const [allSymbols, setAllSymbols] = useState([]);
   const [checked, setChecked] = useState([]);
   const [note, setNote] = useState("");
@@ -53,9 +47,9 @@ const Watchlist = () => {
   };
 
   const handleSymbolSelectHandler = (event, value) => {
+    console.log("value", value);
     setSelectedSymbol(value);
   };
-
   const inputChangeHandler = (e) => {
     setAddedWatchlist(e.target.value);
   };
@@ -68,10 +62,7 @@ const Watchlist = () => {
       }
     );
     if (response) {
-      setAddedWatchlist({
-        label: "",
-        value: "",
-      });
+      setAddedWatchlist("");
       getAllWatchlist();
     }
   };
@@ -88,23 +79,20 @@ const Watchlist = () => {
   };
 
   const addSymbolHandler = async () => {
-    if (selectedSymbol?.value?.length && selectedWatchlist?.value?.length) {
+    console.log(selectedSymbol, selectedWatchlist);
+    if (selectedSymbol?.length && selectedWatchlist?.value?.length) {
       const response = await axios.post(
         `http://localhost:8000/symbols/add-symbols`,
         {
           userId: userId,
           watchlistId: selectedWatchlist?.value,
-          symbols: {
-            name: selectedSymbol?.value,
-            note: "",
-          },
+          symbols: selectedSymbol?.map((symbol) => {
+            return { name: symbol, note: "" };
+          }),
         }
       );
       if (response) {
-        setSelectedSymbol({
-          label: "",
-          value: "",
-        });
+        setSelectedSymbol([]);
         const result = await getAllWatchlist();
         setAllSymbols(
           result?.data?.find(
@@ -194,8 +182,6 @@ const Watchlist = () => {
     getAllWatchlist();
   }, []);
 
-  console.log("checked", checked);
-
   return (
     <Box className="watchlist-container">
       <Box className="action-container">
@@ -209,7 +195,9 @@ const Watchlist = () => {
                 value: list?._id,
               }))}
               value={selectedWatchlist?.label}
-              renderInput={(params) => <TextField {...params} label="Movie" />}
+              renderInput={(params) => (
+                <TextField {...params} label="Watchlist" />
+              )}
               onChange={handleWatchlistSelectChange}
             />
           </FormControl>
@@ -234,9 +222,10 @@ const Watchlist = () => {
             disablePortal
             id="combo-box-demo"
             options={SYMBOL_OPTIONS}
-            value={selectedSymbol?.label}
+            value={selectedSymbol}
             sx={{ height: 45 }}
-            renderInput={(params) => <TextField {...params} label="Movie" />}
+            renderInput={(params) => <TextField {...params} label="Symbols" />}
+            multiple
             onChange={handleSymbolSelectHandler}
           />
           <Box className="button-container">
@@ -270,7 +259,12 @@ const Watchlist = () => {
         <Box className="table-container">
           <Box className="head">
             <Box className="head-1">
-              <Checkbox onClick={checkAllHandler} />
+              <Checkbox
+                onClick={checkAllHandler}
+                checked={
+                  checked.length && checked?.length === allSymbols?.length
+                }
+              />
             </Box>
             <Box className="head-2">Symbol</Box>
             <Box className="head-3">Notes</Box>
