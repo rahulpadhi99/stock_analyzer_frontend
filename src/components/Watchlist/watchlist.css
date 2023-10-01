@@ -49,6 +49,9 @@
 .add-symbol-input div {
   height: 45px;
 }
+.add-notes-input {
+  border: none;
+}
 .save-button {
   width: 100px;
   height: 100%;
@@ -127,13 +130,19 @@
 }
 .head-2,
 .content-2 {
-  width: 30%;
+  width: 20%;
   padding: 4px;
 }
 .head-3,
 .content-3 {
   width: 60%;
   padding: 4px;
+}
+.head-4,
+.content-4 {
+  width: 10%;
+  padding: 4px;
+  text-align: center;
 }
 .content {
   display: flex;

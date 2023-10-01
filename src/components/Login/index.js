@@ -19,13 +19,17 @@ const Login = () => {
     if (pathname === "/my-profile") {
       console.log(`Updated`, user);
     } else {
-      const response = await axios.post("http://localhost:8000/auth/login", {
-        userID: user?.userID,
-        password: user?.password,
-      });
-      const userID = response?.data?.userID;
-      localStorage.setItem("loggedUserID", userID);
-      navigate("/home");
+      try {
+        const response = await axios.post("http://localhost:8000/auth/login", {
+          userID: user?.userID,
+          password: user?.password,
+        });
+        const userID = response?.data?.userID;
+        localStorage.setItem("loggedUserID", userID);
+        navigate("/home");
+      } catch (err) {
+        console.log("err", err?.response?.data?.message);
+      }
     }
   };
 

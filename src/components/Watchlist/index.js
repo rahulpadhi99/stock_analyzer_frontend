@@ -12,13 +12,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const top100Films = [
-  { label: "The Shawshank Redemption", year: 1994 },
-  { label: "The Godfather", year: 1972 },
-  { label: "The Godfather: Part II", year: 1974 },
-  { label: "The Dark Knight", year: 2008 },
-  { label: "12 Angry Men", year: 1957 },
-  { label: "Schindler's List", year: 1993 },
+const SYMBOL_OPTIONS = [
+  { label: "RIL", value: "RIL" },
+  { label: "ADI", value: "ADI" },
 ];
 
 const userId = localStorage.getItem("loggedUserID");
@@ -26,18 +22,39 @@ const userId = localStorage.getItem("loggedUserID");
 const Watchlist = () => {
   const [addedWatchlist, setAddedWatchlist] = useState("");
   const [allWatchlist, setAllWatchlist] = useState([]);
+  const [selectedWatchlist, setSelectedWatchlist] = useState({
+    label: "",
+    value: "",
+  });
+  const [selectedSymbol, setSelectedSymbol] = useState({
+    label: "",
+    value: "",
+  });
+  const [allSymbols, setAllSymbols] = useState([]);
+  const [checked, setChecked] = useState([]);
+  const [note, setNote] = useState("");
 
   const getAllWatchlist = async () => {
     const response = await axios.get(
       `http://localhost:8000/watchlist?userId=${userId}`
     );
-    const allWatchlist = response?.data;
-    setAllWatchlist(
-      allWatchlist?.map((list) => ({ label: list?.name, value: list?._id }))
+    setAllWatchlist(response?.data);
+    return response;
+  };
+
+  const deleteWatchlist = async (watchlistId) => {};
+
+  const handleWatchlistSelectChange = (event, value) => {
+    setSelectedWatchlist(value);
+    setAllSymbols(
+      allWatchlist?.find((watchlist) => watchlist?._id === value?.value)
+        ?.symbols
     );
   };
 
-  const handleSelectChange = (e) => {};
+  const handleSymbolSelectHandler = (event, value) => {
+    setSelectedSymbol(value);
+  };
 
   const inputChangeHandler = (e) => {
     setAddedWatchlist(e.target.value);
@@ -51,36 +68,134 @@ const Watchlist = () => {
       }
     );
     if (response) {
+      setAddedWatchlist({
+        label: "",
+        value: "",
+      });
       getAllWatchlist();
     }
   };
-  const addSymbolHandler = () => {
-    console.log("added symbol");
+
+  const deleteWatchlistHandler = async () => {
+    const response = await axios.delete(
+      `http://localhost:8000/watchlist?watchlistId=${selectedWatchlist?.value}`
+    );
+    console.log(response);
+    if (response) {
+      setSelectedWatchlist({ label: "", value: "" });
+      getAllWatchlist();
+    }
   };
-  const deletelistHandler = () => {
-    console.log("deleted watchlist");
+
+  const addSymbolHandler = async () => {
+    if (selectedSymbol?.value?.length && selectedWatchlist?.value?.length) {
+      const response = await axios.post(
+        `http://localhost:8000/symbols/add-symbols`,
+        {
+          userId: userId,
+          watchlistId: selectedWatchlist?.value,
+          symbols: {
+            name: selectedSymbol?.value,
+            note: "",
+          },
+        }
+      );
+      if (response) {
+        setSelectedSymbol({
+          label: "",
+          value: "",
+        });
+        const result = await getAllWatchlist();
+        setAllSymbols(
+          result?.data?.find(
+            (watchlist) => watchlist?._id === selectedWatchlist?.value
+          )?.symbols
+        );
+      }
+    } else {
+      console.log("Missing watchlist or symbol");
+    }
   };
-  const checkHandler = () => {
-    console.log("checked");
+
+  const checkHandler = (symbolId) => {
+    if (checked?.includes(symbolId)) {
+      const filteredData = checked?.filter((e) => e !== symbolId);
+      setChecked(filteredData);
+    } else {
+      setChecked((prev) => [...prev, symbolId]);
+    }
   };
   const checkAllHandler = () => {
-    console.log("checked all");
+    if (checked?.length) {
+      setChecked([]);
+    } else {
+      setChecked(allSymbols?.map((e) => e?._id));
+    }
   };
-  const removeSymbolHandler = () => {
+  const removeSymbolHandler = async () => {
+    if (checked?.length) {
+      try {
+        const response = await axios.put(`http://localhost:8000/symbols`, {
+          userId: userId,
+          watchlistId: selectedWatchlist?.value,
+          symbolsIds: checked,
+        });
+        if (response) {
+          const result = await getAllWatchlist();
+          setAllSymbols(
+            result?.data?.find(
+              (watchlist) => watchlist?._id === selectedWatchlist?.value
+            )?.symbols
+          );
+          setChecked([]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
     console.log("removed Symbol");
   };
   const displayChartsHandler = () => {
     console.log("chart displayed");
   };
-  const updateNotesHandler = () => {
-    console.log("notes updated");
+
+  const updateNotesHandler = async (symbolId) => {
+    if (symbolId) {
+      try {
+        const response = await axios.put(
+          `http://localhost:8000/symbols/notes`,
+          {
+            userId: userId,
+            watchlistId: selectedWatchlist?.value,
+            symbolId: symbolId,
+            note: note,
+          }
+        );
+        if (response) {
+          const result = await getAllWatchlist();
+          setAllSymbols(
+            result?.data?.find(
+              (watchlist) => watchlist?._id === selectedWatchlist?.value
+            )?.symbols
+          );
+          setChecked([]);
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
+  const notesChangeHandler = (event) => {
+    setNote(event.target.value);
   };
 
   useEffect(() => {
     getAllWatchlist();
   }, []);
 
-  console.log("watchlist", allWatchlist);
+  console.log("checked", checked);
+
   return (
     <Box className="watchlist-container">
       <Box className="action-container">
@@ -89,8 +204,13 @@ const Watchlist = () => {
             <Autocomplete
               disablePortal
               id="combo-box-demo"
-              options={allWatchlist}
+              options={allWatchlist?.map((list) => ({
+                label: list?.name,
+                value: list?._id,
+              }))}
+              value={selectedWatchlist?.label}
               renderInput={(params) => <TextField {...params} label="Movie" />}
+              onChange={handleWatchlistSelectChange}
             />
           </FormControl>
           <Box className="add-watchlist-container">
@@ -113,9 +233,11 @@ const Watchlist = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={top100Films}
+            options={SYMBOL_OPTIONS}
+            value={selectedSymbol?.label}
             sx={{ height: 45 }}
             renderInput={(params) => <TextField {...params} label="Movie" />}
+            onChange={handleSymbolSelectHandler}
           />
           <Box className="button-container">
             <Button className="add-symbol-button" onClick={addSymbolHandler}>
@@ -123,7 +245,7 @@ const Watchlist = () => {
             </Button>
             <Button
               className="delete-watchlist-button"
-              onClick={deletelistHandler}
+              onClick={deleteWatchlistHandler}
             >
               Delete Watchlist
             </Button>
@@ -136,16 +258,13 @@ const Watchlist = () => {
             className="remove-watchlist-button"
             onClick={removeSymbolHandler}
           >
-            Remove Watchlist
+            Remove Symbols
           </Button>
           <Button
             className="display-charts-button"
             onClick={displayChartsHandler}
           >
             Display Charts
-          </Button>
-          <Button className="update-notes-button" onClick={updateNotesHandler}>
-            Update Notes
           </Button>
         </Box>
         <Box className="table-container">
@@ -155,21 +274,43 @@ const Watchlist = () => {
             </Box>
             <Box className="head-2">Symbol</Box>
             <Box className="head-3">Notes</Box>
+            <Box className="head-4"></Box>
           </Box>
           <Divider />
           <Box className="content">
-            {[1, 2, 3, 4, 5]?.map((e) => {
+            {allSymbols?.map((symbol) => {
               return (
-                <>
+                <Box key={symbol?._id}>
                   <Box className="content-data">
                     <Box className="content-1">
-                      <Checkbox onClick={() => checkHandler()} />
+                      <Checkbox
+                        onClick={() => checkHandler(symbol?._id)}
+                        checked={checked?.includes(symbol?._id)}
+                      />
                     </Box>
-                    <Box className="content-2">RIL</Box>
-                    <Box className="content-3">A good stock to add</Box>
+                    <Box className="content-2">{symbol?.name}</Box>
+                    <Box className="content-3">
+                      <TextField
+                        fullWidth
+                        type="text"
+                        placeholder="Notes"
+                        defaultValue={symbol?.note}
+                        className="add-notes-input"
+                        onChange={notesChangeHandler}
+                        variant="standard"
+                      />
+                    </Box>
+                    <Box className="content-4">
+                      <Button
+                        className="update-notes-button"
+                        onClick={() => updateNotesHandler(symbol?._id)}
+                      >
+                        Update Notes
+                      </Button>
+                    </Box>
                   </Box>
                   <Divider />
-                </>
+                </Box>
               );
             })}
           </Box>
