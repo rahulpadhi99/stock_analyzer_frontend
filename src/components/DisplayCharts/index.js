@@ -1,11 +1,13 @@
 import { Box } from "@mui/material";
 import React from "react";
+import "./displayChart.css";
 import ReactApexChart from "react-apexcharts";
 
 const CandlestickChart = () => {
   // Sample data for the candlestick chart
   const series = [
     {
+      name: "Candlestick",
       data: [
         {
           x: new Date(1538778600000),
@@ -251,6 +253,254 @@ const CandlestickChart = () => {
     },
   ];
 
+  const series2 = [
+    {
+      name: "Volume",
+      data: [
+        {
+          x: new Date(1538778600000),
+          y: 2800.45,
+        },
+        {
+          x: new Date(1538780400000),
+          y: 3560.7,
+        },
+        {
+          x: new Date(1538782200000),
+          y: 4900.1,
+        },
+        {
+          x: new Date(1538784000000),
+          y: 3400.8,
+        },
+        {
+          x: new Date(1538785800000),
+          y: 2370.8,
+        },
+        {
+          x: new Date(1538787600000),
+          y: 3560.0,
+        },
+        {
+          x: new Date(1538789400000),
+          y: 3190.0,
+        },
+        {
+          x: new Date(1538791200000),
+          y: 5100.1,
+        },
+        {
+          x: new Date(1538793000000),
+          y: 4200.1,
+        },
+        {
+          x: new Date(1538794800000),
+          y: 4010.0,
+        },
+        {
+          x: new Date(1538796600000),
+          y: 2430.9,
+        },
+        {
+          x: new Date(1538798400000),
+          y: 1200.7,
+        },
+        {
+          x: new Date(1538800200000),
+          y: 1000.1,
+        },
+        {
+          x: new Date(1538802000000),
+          y: 2700.79,
+        },
+        {
+          x: new Date(1538803800000),
+          y: 1700.8,
+        },
+        {
+          x: new Date(1538805600000),
+          y: 5600.39,
+        },
+        {
+          x: new Date(1538807400000),
+          y: 4100.9,
+        },
+        {
+          x: new Date(1538809200000),
+          y: 3189.0,
+        },
+        {
+          x: new Date(1538811000000),
+          y: 2640.9,
+        },
+        {
+          x: new Date(1538812800000),
+          y: 3190.8,
+        },
+        {
+          x: new Date(1538814600000),
+          y: 5300.8,
+        },
+        {
+          x: new Date(1538816400000),
+          y: 4200.8,
+        },
+        {
+          x: new Date(1538818200000),
+          y: 3100.7,
+        },
+        {
+          x: new Date(1538820000000),
+          y: 2900.8,
+        },
+        {
+          x: new Date(1538821800000),
+          y: 900.9,
+        },
+        {
+          x: new Date(1538823600000),
+          y: 1400.4,
+        },
+        {
+          x: new Date(1538825400000),
+          y: 3200.0,
+        },
+        {
+          x: new Date(1538827200000),
+          y: 5000.0,
+        },
+        {
+          x: new Date(1538829000000),
+          y: 3000.8,
+        },
+        {
+          x: new Date(1538830800000),
+          y: 4400.8,
+        },
+        {
+          x: new Date(1538832600000),
+          y: 4300.8,
+        },
+        {
+          x: new Date(1538834400000),
+          y: 3600.2,
+        },
+        {
+          x: new Date(1538836200000),
+          y: 2100.9,
+        },
+        {
+          x: new Date(1538838000000),
+          y: 1400.9,
+        },
+        {
+          x: new Date(1538839800000),
+          y: 1100.75,
+        },
+        {
+          x: new Date(1538841600000),
+          y: 3300.6,
+        },
+        {
+          x: new Date(1538843400000),
+          y: 2300.1,
+        },
+        {
+          x: new Date(1538845200000),
+          y: 2400.8,
+        },
+        {
+          x: new Date(1538847000000),
+          y: 3900.5,
+        },
+        {
+          x: new Date(1538848800000),
+          y: 4700.1,
+        },
+        {
+          x: new Date(1538850600000),
+          y: 5190.8,
+        },
+        {
+          x: new Date(1538852400000),
+          y: 4210.7,
+        },
+        {
+          x: new Date(1538854200000),
+          y: 3200.7,
+        },
+        {
+          x: new Date(1538856000000),
+          y: 2500.9,
+        },
+        {
+          x: new Date(1538857800000),
+          y: 5000.9,
+        },
+        {
+          x: new Date(1538859600000),
+          y: 1700.8,
+        },
+        {
+          x: new Date(1538861400000),
+          y: 3800.7,
+        },
+        {
+          x: new Date(1538863200000),
+          y: 3200.6,
+        },
+        {
+          x: new Date(1538865000000),
+          y: 2700.0,
+        },
+        {
+          x: new Date(1538866800000),
+          y: 1800.8,
+        },
+        {
+          x: new Date(1538868600000),
+          y: 7600.8,
+        },
+        {
+          x: new Date(1538870400000),
+          y: 5100.3,
+        },
+        {
+          x: new Date(1538872200000),
+          y: 7200.0,
+        },
+        {
+          x: new Date(1538874000000),
+          y: 4500.0,
+        },
+        {
+          x: new Date(1538875800000),
+          y: 3100.5,
+        },
+        {
+          x: new Date(1538877600000),
+          y: 4600.3,
+        },
+        {
+          x: new Date(1538879400000),
+          y: 2000.1,
+        },
+        {
+          x: new Date(1538881200000),
+          y: 7000.24,
+        },
+        {
+          x: new Date(1538883000000),
+          y: 6000.08,
+        },
+        {
+          x: new Date(1538884800000),
+          y: 4000.45,
+        },
+      ],
+    },
+  ];
+
   // Create annotations for "H" and "L" labels
   const annotations = series[0].data.map((dataPoint, index) => ({
     x: dataPoint.x.getTime(),
@@ -268,11 +518,19 @@ const CandlestickChart = () => {
   const options = {
     chart: {
       type: "candlestick",
-      height: 350,
+      toolbar: {
+        show: false, // Hide the download option and auto-select zoom
+      },
     },
     xaxis: {
       type: "datetime",
+      labels: {
+        show: false, // Hide the x-axis labels
+      },
     },
+    // yaxis: {
+    //   opposite: true,
+    // },
     annotations: {
       points: annotations, // Add the annotations here
     },
@@ -296,19 +554,91 @@ const CandlestickChart = () => {
           show: true,
         },
       },
+      borderColor: "#cccccc",
+    },
+  };
 
+  const volumeOptions = {
+    chart: {
+      type: "bar",
+      toolbar: {
+        show: false, // Hide the download option and auto-select zoom
+      },
+    },
+    xaxis: {
+      type: "datetime",
+    },
+    dataLabels: {
+      enabled: false, // Hide data labels for the volume chart
+    },
+    grid: {
+      position: "front",
+      yaxis: {
+        lines: {
+          show: true,
+        },
+      },
+      xaxis: {
+        lines: {
+          show: true,
+        },
+      },
       borderColor: "#cccccc",
     },
   };
 
   return (
-    <div>
-      <ReactApexChart
-        options={options}
-        series={series}
-        type="candlestick"
-        height={350}
-      />
+    <div className="display-container">
+      <div className="chart-container-1">
+        <div className="chart-1">
+          <ReactApexChart
+            options={options}
+            series={series}
+            type="candlestick"
+            height={300}
+          />
+          <ReactApexChart
+            options={volumeOptions}
+            series={series2}
+            type="bar"
+            height={150}
+            className="apex-volume"
+          />
+        </div>
+        <div className="chart-2">
+          <ReactApexChart
+            options={options}
+            series={series}
+            type="candlestick"
+            height={300}
+          />
+          <ReactApexChart
+            options={volumeOptions}
+            series={series2}
+            type="bar"
+            height={150}
+            className="apex-volume"
+          />
+        </div>
+      </div>
+      <div className="chart-container-2">
+        <div className="chart-3">
+          <ReactApexChart
+            options={options}
+            series={series}
+            type="candlestick"
+            height={300}
+          />
+          <ReactApexChart
+            options={volumeOptions}
+            series={series2}
+            type="bar"
+            height={150}
+            className="apex-volume"
+          />
+        </div>
+        <div className="chart-4">Remote</div>
+      </div>
     </div>
   );
 };

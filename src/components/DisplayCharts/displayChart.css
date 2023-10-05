@@ -1,0 +1,23 @@
+.display-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+.chart-container-1,
+.chart-container-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 50%;
+  height: 50%;
+}
+
+.apex-volume {
+  margin-top: -42px;
+}
+.chart-1,
+.chart-2,
+.chart-3,
+.chart-4 {
+  border: 1px solid red;
+}

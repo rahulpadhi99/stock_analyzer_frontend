@@ -73,7 +73,6 @@ const Watchlist = () => {
     const response = await axios.delete(
       `http://localhost:8000/watchlist?watchlistId=${selectedWatchlist?.value}`
     );
-    console.log(response);
     if (response) {
       setSelectedWatchlist({ label: "", value: "" });
       getAllWatchlist();
@@ -81,7 +80,6 @@ const Watchlist = () => {
   };
 
   const addSymbolHandler = async () => {
-    console.log(selectedSymbol, selectedWatchlist);
     if (selectedSymbol?.length && selectedWatchlist?.value?.length) {
       const response = await axios.post(
         `http://localhost:8000/symbols/add-symbols`,
@@ -103,7 +101,6 @@ const Watchlist = () => {
         );
       }
     } else {
-      console.log("Missing watchlist or symbol");
     }
   };
 
@@ -139,11 +136,8 @@ const Watchlist = () => {
           );
           setChecked([]);
         }
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
-    console.log("removed Symbol");
   };
   const displayChartsHandler = () => {
     navigate("/display-charts");
@@ -170,9 +164,7 @@ const Watchlist = () => {
           );
           setChecked([]);
         }
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     }
   };
 
