@@ -30,7 +30,7 @@ const Watchlist = () => {
 
   const getAllWatchlist = async () => {
     const response = await axios.get(
-      `http://localhost:8000/watchlist?userId=${userId}`
+      `${process.env.REACT_APP_BASE_URL}/watchlist?userId=${userId}`
     );
     setAllWatchlist(response?.data);
     return response;
@@ -54,24 +54,23 @@ const Watchlist = () => {
     setAddedWatchlist(e.target.value);
   };
   const saveWatchlistHandler = async () => {
-    // const response = await axios.post(
-    //   "http://localhost:8000/watchlist/add-watchlist",
-    //   {
-    //     name: addedWatchlist,
-    //     userId: userId,
-    //   }
-    // );
-    // if (response) {
-    //   setAddedWatchlist("");
-    //   getAllWatchlist();
-    // }
+    const response = await axios.post(
+      `${process.env.REACT_APP_BASE_URL}/watchlist/add-watchlist`,
+      {
+        name: addedWatchlist,
+        userId: userId,
+      }
+    );
+    if (response) {
+      setAddedWatchlist("");
+      getAllWatchlist();
+    }
   };
 
   const deleteWatchlistHandler = async () => {
     // const response = await axios.delete(
-    //   `http://localhost:8000/watchlist?watchlistId=${selectedWatchlist?.value}`
+    //   `${process.env.REACT_APP_BASE_URL}/watchlist?watchlistId=${selectedWatchlist?.value}`
     // );
-    // console.log(response);
     // if (response) {
     //   setSelectedWatchlist({ label: "", value: "" });
     //   getAllWatchlist();
@@ -79,10 +78,9 @@ const Watchlist = () => {
   };
 
   const addSymbolHandler = async () => {
-    console.log(selectedSymbol, selectedWatchlist);
     // if (selectedSymbol?.length && selectedWatchlist?.value?.length) {
     //   const response = await axios.post(
-    //     `http://localhost:8000/symbols/add-symbols`,
+    //     `${process.env.REACT_APP_BASE_URL}/symbols/add-symbols`,
     //     {
     //       userId: userId,
     //       watchlistId: selectedWatchlist?.value,
@@ -101,7 +99,6 @@ const Watchlist = () => {
     //     );
     //   }
     // } else {
-    //   console.log("Missing watchlist or symbol");
     // }
   };
 
@@ -123,11 +120,14 @@ const Watchlist = () => {
   const removeSymbolHandler = async () => {
     // if (checked?.length) {
     //   try {
-    //     const response = await axios.put(`http://localhost:8000/symbols`, {
-    //       userId: userId,
-    //       watchlistId: selectedWatchlist?.value,
-    //       symbolsIds: checked,
-    //     });
+    //     const response = await axios.put(
+    //       `${process.env.REACT_APP_BASE_URL}/symbols`,
+    //       {
+    //         userId: userId,
+    //         watchlistId: selectedWatchlist?.value,
+    //         symbolsIds: checked,
+    //       }
+    //     );
     //     if (response) {
     //       const result = await getAllWatchlist();
     //       setAllSymbols(
@@ -137,11 +137,8 @@ const Watchlist = () => {
     //       );
     //       setChecked([]);
     //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    //   } catch (err) {}
     // }
-    console.log("removed Symbol");
   };
   const displayChartsHandler = () => {
     console.log("chart displayed");
@@ -151,7 +148,7 @@ const Watchlist = () => {
     // if (symbolId) {
     //   try {
     //     const response = await axios.put(
-    //       `http://localhost:8000/symbols/notes`,
+    //       `${process.env.REACT_APP_BASE_URL}/symbols/notes`,
     //       {
     //         userId: userId,
     //         watchlistId: selectedWatchlist?.value,
@@ -168,9 +165,7 @@ const Watchlist = () => {
     //       );
     //       setChecked([]);
     //     }
-    //   } catch (err) {
-    //     console.log(err);
-    //   }
+    //   } catch (err) {}
     // }
   };
 
@@ -178,9 +173,9 @@ const Watchlist = () => {
     setNote(event.target.value);
   };
 
-  // useEffect(() => {
-  //   getAllWatchlist();
-  // }, []);
+  useEffect(() => {
+    getAllWatchlist();
+  }, []);
 
   return (
     <Box className="watchlist-container">
