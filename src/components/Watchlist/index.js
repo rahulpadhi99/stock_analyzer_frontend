@@ -33,7 +33,7 @@ const Watchlist = () => {
 
   const getAllWatchlist = async () => {
     const response = await axios.get(
-      `http://localhost:8000/watchlist?userId=${userId}`
+      `${process.env.REACT_APP_BASE_URL}/watchlist?userId=${userId}`
     );
     setAllWatchlist(response?.data);
     return response;
@@ -57,7 +57,7 @@ const Watchlist = () => {
   };
   const saveWatchlistHandler = async () => {
     const response = await axios.post(
-      "http://localhost:8000/watchlist/add-watchlist",
+      `${process.env.REACT_APP_BASE_URL}/watchlist/add-watchlist`,
       {
         name: addedWatchlist,
         userId: userId,
@@ -71,7 +71,7 @@ const Watchlist = () => {
 
   const deleteWatchlistHandler = async () => {
     const response = await axios.delete(
-      `http://localhost:8000/watchlist?watchlistId=${selectedWatchlist?.value}`
+      `${process.env.REACT_APP_BASE_URL}/watchlist?watchlistId=${selectedWatchlist?.value}`
     );
     if (response) {
       setSelectedWatchlist({ label: "", value: "" });
@@ -82,7 +82,7 @@ const Watchlist = () => {
   const addSymbolHandler = async () => {
     if (selectedSymbol?.length && selectedWatchlist?.value?.length) {
       const response = await axios.post(
-        `http://localhost:8000/symbols/add-symbols`,
+        `${process.env.REACT_APP_BASE_URL}/symbols/add-symbols`,
         {
           userId: userId,
           watchlistId: selectedWatchlist?.value,
@@ -122,11 +122,14 @@ const Watchlist = () => {
   const removeSymbolHandler = async () => {
     if (checked?.length) {
       try {
-        const response = await axios.put(`http://localhost:8000/symbols`, {
-          userId: userId,
-          watchlistId: selectedWatchlist?.value,
-          symbolsIds: checked,
-        });
+        const response = await axios.put(
+          `${process.env.REACT_APP_BASE_URL}/symbols`,
+          {
+            userId: userId,
+            watchlistId: selectedWatchlist?.value,
+            symbolsIds: checked,
+          }
+        );
         if (response) {
           const result = await getAllWatchlist();
           setAllSymbols(
@@ -147,7 +150,7 @@ const Watchlist = () => {
     if (symbolId) {
       try {
         const response = await axios.put(
-          `http://localhost:8000/symbols/notes`,
+          `${process.env.REACT_APP_BASE_URL}/symbols/notes`,
           {
             userId: userId,
             watchlistId: selectedWatchlist?.value,
