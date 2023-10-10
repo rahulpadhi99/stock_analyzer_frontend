@@ -19,6 +19,7 @@ const userId = localStorage.getItem("loggedUserID");
 const Watchlist = () => {
   const [addedWatchlist, setAddedWatchlist] = useState("");
   const [allWatchlist, setAllWatchlist] = useState([]);
+  const [allSymbollist, setAllSymbollist] = useState([]);
   const [selectedWatchlist, setSelectedWatchlist] = useState({
     label: "",
     value: "",
@@ -36,6 +37,14 @@ const Watchlist = () => {
     return response;
   };
 
+  const getAllSymbollist = async () => {
+    const response = await axios.get(
+      `${process.env.REACT_APP_BASE_URL}/symbols/symbol-list`
+    );
+    setAllSymbollist(response?.data);
+    return response;
+  };
+
   const deleteWatchlist = async (watchlistId) => {};
 
   const handleWatchlistSelectChange = (event, value) => {
@@ -47,7 +56,6 @@ const Watchlist = () => {
   };
 
   const handleSymbolSelectHandler = (event, value) => {
-    console.log("value", value);
     setSelectedSymbol(value);
   };
   const inputChangeHandler = (e) => {
@@ -175,6 +183,7 @@ const Watchlist = () => {
 
   useEffect(() => {
     getAllWatchlist();
+    getAllSymbollist();
   }, []);
 
   return (
@@ -216,7 +225,7 @@ const Watchlist = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={SYMBOL_OPTIONS}
+            options={allSymbollist?.map((e) => e?.symbol)}
             value={selectedSymbol}
             sx={{ height: 45 }}
             renderInput={(params) => <TextField {...params} label="Symbols" />}
