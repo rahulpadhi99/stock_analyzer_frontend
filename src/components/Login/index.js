@@ -4,6 +4,7 @@ import "./login.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import axios from "axios";
+import { passwordValidator } from "../../utils/passwordValidation";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,25 +15,42 @@ const Login = () => {
     password: "",
     confirmPassword: "",
   });
+  const [error, setError] = useState({
+    userID: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const submitHandler = async () => {
-    if (pathname === "/my-profile") {
-      console.log(`Updated`, user);
-    } else {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/auth/login`,
-          {
-            userID: user?.userID,
-            password: user?.password,
-          }
-        );
-        const userID = response?.data?.userID;
-        localStorage.setItem("loggedUserID", userID);
-        navigate("/home");
-      } catch (err) {
-        console.log("err", err?.response?.data?.message);
+    const isPasswordValidated = passwordValidator(user?.password);
+    if (isPasswordValidated) {
+      if (pathname === "/my-profile") {
+        console.log(`Updated`, user);
+      } else {
+        try {
+          const response = await axios.post(
+            `${process.env.REACT_APP_BASE_URL}/auth/login`,
+            {
+              userID: user?.userID,
+              password: user?.password,
+            }
+          );
+          const userID = response?.data?.userID;
+          localStorage.setItem("loggedUserID", userID);
+          navigate("/home");
+        } catch (err) {
+          setError((prev) => ({
+            ...prev,
+            password: err?.response?.data?.message,
+          }));
+        }
       }
+    } else {
+      setError((prev) => ({
+        ...prev,
+        password:
+          "Please enter a valid password, A standard password must contain min 8 characters, min 1 uppercase alphabet, lowercase alphabet, numeric value and special symbol",
+      }));
     }
   };
 
@@ -61,6 +79,16 @@ const Login = () => {
         className="input"
         onChange={changeHandler}
       />
+      {error && (
+        <Typography
+          variant="caption"
+          color="red"
+          textAlign="left"
+          width={"100%"}
+        >
+          {error?.password}
+        </Typography>
+      )}
       {pathname === "/my-profile" && (
         <TextField
           type="password"

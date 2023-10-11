@@ -14,8 +14,6 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-const SYMBOL_OPTIONS = ["RIL", "ADI"];
-
 const userId = localStorage.getItem("loggedUserID");
 
 const Watchlist = () => {
@@ -31,6 +29,15 @@ const Watchlist = () => {
   const [allSymbols, setAllSymbols] = useState([]);
   const [checked, setChecked] = useState([]);
   const [note, setNote] = useState("");
+
+  console.log(
+    "ssss",
+    allSymbollist
+      ?.filter((e) => {
+        return selectedSymbol?.includes(e?.symbol) && e;
+      })
+      ?.map((e) => ({ ...e, notes: "" }))
+  );
 
   const getAllWatchlist = async () => {
     const response = await axios.get(
@@ -59,7 +66,7 @@ const Watchlist = () => {
   };
 
   const handleSymbolSelectHandler = (event, value) => {
-    setSelectedSymbol(value);
+    setSelectedSymbol(value?.map((e) => e?.split("-")[0].trim()));
   };
   const inputChangeHandler = (e) => {
     setAddedWatchlist(e.target.value);
@@ -95,9 +102,11 @@ const Watchlist = () => {
         {
           userId: userId,
           watchlistId: selectedWatchlist?.value,
-          symbols: selectedSymbol?.map((symbol) => {
-            return { name: symbol, note: "" };
-          }),
+          symbols: allSymbollist
+            ?.filter((e) => {
+              return selectedSymbol?.includes(e?.symbol) && e;
+            })
+            ?.map((e) => ({ ...e, notes: "" })),
         }
       );
       if (response) {
@@ -228,7 +237,7 @@ const Watchlist = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={allSymbollist?.map((e) => e?.symbol)}
+            options={allSymbollist?.map((e) => `${e?.symbol} - ${e?.company}`)}
             value={selectedSymbol}
             sx={{ height: 45 }}
             renderInput={(params) => <TextField {...params} label="Symbols" />}
@@ -289,7 +298,7 @@ const Watchlist = () => {
                         checked={checked?.includes(symbol?._id)}
                       />
                     </Box>
-                    <Box className="content-2">{symbol?.name}</Box>
+                    <Box className="content-2">{symbol?.symbol}</Box>
                     <Box className="content-3">
                       <TextField
                         fullWidth
