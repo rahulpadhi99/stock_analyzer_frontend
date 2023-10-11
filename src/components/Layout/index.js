@@ -8,7 +8,8 @@ const Layout = (props) => {
   const navigate = useNavigate();
 
   const logoutHandler = async () => {
-    navigate("/");
+    localStorage.clear();
+    navigate("/login");
   };
 
   return (
@@ -27,12 +28,7 @@ const Layout = (props) => {
               </Button>
             </Box>
             <Box>
-              <Button
-                className="button"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
+              <Button className="button" onClick={logoutHandler}>
                 Logout
               </Button>
             </Box>
