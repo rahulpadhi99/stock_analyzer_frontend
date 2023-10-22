@@ -13,11 +13,15 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
+import { NSE_CONSTANT } from "../../constant";
+import { useDispatch } from "react-redux";
+import { addStock } from "../../store/SelectedStock";
 
 const userId = localStorage.getItem("loggedUserID");
 
 const Watchlist = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [addedWatchlist, setAddedWatchlist] = useState("");
   const [allWatchlist, setAllWatchlist] = useState([]);
   const [allSymbollist, setAllSymbollist] = useState([]);
@@ -29,15 +33,6 @@ const Watchlist = () => {
   const [allSymbols, setAllSymbols] = useState([]);
   const [checked, setChecked] = useState([]);
   const [note, setNote] = useState("");
-
-  console.log(
-    "ssss",
-    allSymbollist
-      ?.filter((e) => {
-        return selectedSymbol?.includes(e?.symbol) && e;
-      })
-      ?.map((e) => ({ ...e, notes: "" }))
-  );
 
   const getAllWatchlist = async () => {
     const response = await axios.get(
@@ -52,7 +47,6 @@ const Watchlist = () => {
       `${process.env.REACT_APP_BASE_URL}/symbols/symbol-list`
     );
     setAllSymbollist(response?.data);
-    return response;
   };
 
   const deleteWatchlist = async (watchlistId) => {};
@@ -68,9 +62,11 @@ const Watchlist = () => {
   const handleSymbolSelectHandler = (event, value) => {
     setSelectedSymbol(value?.map((e) => e?.split("-")[0].trim()));
   };
+
   const inputChangeHandler = (e) => {
     setAddedWatchlist(e.target.value);
   };
+
   const saveWatchlistHandler = async () => {
     const response = await axios.post(
       `${process.env.REACT_APP_BASE_URL}/watchlist/add-watchlist`,
@@ -104,7 +100,7 @@ const Watchlist = () => {
           watchlistId: selectedWatchlist?.value,
           symbols: allSymbollist
             ?.filter((e) => {
-              return selectedSymbol?.includes(e?.symbol) && e;
+              return selectedSymbol?.includes(e?.Code) && e;
             })
             ?.map((e) => ({ ...e, notes: "" })),
         }
@@ -124,12 +120,13 @@ const Watchlist = () => {
 
   const checkHandler = (symbolId) => {
     if (checked?.includes(symbolId)) {
-      const filteredData = checked?.filter((e) => e !== symbolId);
-      setChecked(filteredData);
+      const filteredId = checked?.filter((e) => e !== symbolId);
+      setChecked(filteredId);
     } else {
       setChecked((prev) => [...prev, symbolId]);
     }
   };
+
   const checkAllHandler = () => {
     if (checked?.length) {
       setChecked([]);
@@ -160,7 +157,12 @@ const Watchlist = () => {
       } catch (err) {}
     }
   };
+
   const displayChartsHandler = () => {
+    const selectedStocks = allSymbols?.filter((symbol) =>
+      checked?.includes(symbol?._id)
+    );
+    dispatch(addStock(selectedStocks));
     navigate("/display-charts");
   };
 
@@ -237,7 +239,7 @@ const Watchlist = () => {
           <Autocomplete
             disablePortal
             id="combo-box-demo"
-            options={allSymbollist?.map((e) => `${e?.symbol} - ${e?.company}`)}
+            options={allSymbollist?.map((e) => `${e?.Code} - ${e?.Name}`)}
             value={selectedSymbol}
             sx={{ height: 45 }}
             renderInput={(params) => <TextField {...params} label="Symbols" />}
@@ -298,7 +300,7 @@ const Watchlist = () => {
                         checked={checked?.includes(symbol?._id)}
                       />
                     </Box>
-                    <Box className="content-2">{symbol?.symbol}</Box>
+                    <Box className="content-2">{symbol?.Code}</Box>
                     <Box className="content-3">
                       <TextField
                         fullWidth
