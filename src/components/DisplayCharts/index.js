@@ -7,6 +7,7 @@ import CandleStick from "../Charts/CandleStick";
 import Volume from "../Charts/Volume";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import moment from "moment/moment";
 
 const candlestickData = WEEKLY_CONST?.map((e) => ({
   x: new Date(e?.date),
@@ -21,12 +22,19 @@ const volumeChartData = WEEKLY_CONST?.map((e) => ({
 const DisplayCharts = () => {
   const { selectedStocks } = useSelector((state) => state?.selectedStock);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [chartData, setChartData] = useState({
+    d: [],
+    w: [],
+    m: [],
+  });
   const navigate = useNavigate();
 
-  const getChartData = async (symbol, period) => {
+  const getChartData = async (symbol, period, from, to) => {
     const result = await axios.get(
-      `${process.env.REACT_APP_EODHD_BASE_URL}/eod/${symbol}.NSE?api_token=${process.env.REACT_APP_EODHD_API_KEY}&&fmt=json&&period=${period}`
+      `${process.env.REACT_APP_EODHD_BASE_URL}/eod/${symbol}.NSE?api_token=${process.env.REACT_APP_EODHD_API_KEY}&&fmt=json&&period=${period}&&from=${from}&&to=${to}`
     );
+    result?.data?.splice(0, result?.data?.length - 60);
+    setChartData((prev) => ({ ...prev, [period]: result?.data }));
   };
 
   const previousBtnHandler = () => {
@@ -43,11 +51,42 @@ const DisplayCharts = () => {
 
   useEffect(() => {
     if (selectedStocks?.length) {
-      getChartData(selectedStocks[currentIndex]?.Code, "w");
+      const weeklyPeriod = {
+        startDate: moment().subtract(420, "days").format("YYYY-MM-DD"),
+        lastDate: moment().subtract(1, "days").format("YYYY-MM-DD"),
+      };
+      const dailyPeriod = {
+        startDate: moment().subtract(100, "days").format("YYYY-MM-DD"),
+        lastDate: moment().subtract(1, "days").format("YYYY-MM-DD"),
+      };
+      const monthlyPeriod = {
+        startDate: moment().subtract(5, "years").format("YYYY-MM-DD"),
+        lastDate: moment().subtract(1, "days").format("YYYY-MM-DD"),
+      };
+      getChartData(
+        selectedStocks[currentIndex]?.Code,
+        "d",
+        dailyPeriod?.startDate,
+        dailyPeriod?.lastDate
+      );
+      getChartData(
+        selectedStocks[currentIndex]?.Code,
+        "w",
+        weeklyPeriod?.startDate,
+        weeklyPeriod?.lastDate
+      );
+      getChartData(
+        selectedStocks[currentIndex]?.Code,
+        "m",
+        monthlyPeriod?.startDate,
+        monthlyPeriod?.lastDate
+      );
     } else {
       navigate(-1);
     }
   }, [currentIndex]);
+
+  console.log("chartData", chartData);
 
   return (
     <Box>
