@@ -33,6 +33,7 @@ const Watchlist = () => {
   const [allSymbols, setAllSymbols] = useState([]);
   const [checked, setChecked] = useState([]);
   const [note, setNote] = useState("");
+  const [initalFetch, setInitialFetch] = useState(false);
 
   const getAllWatchlist = async () => {
     const response = await axios.get(
@@ -43,10 +44,14 @@ const Watchlist = () => {
   };
 
   const getAllSymbollist = async () => {
-    const response = await axios.get(
-      `${process.env.REACT_APP_BASE_URL}/symbols/symbol-list`
-    );
-    setAllSymbollist(response?.data);
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_EODHD_BASE_URL}/exchange-symbol-list/NSE?api_token=${process.env.REACT_APP_EODHD_API_KEY}&&fmt=json`
+      );
+      setAllSymbollist(response?.data);
+    } catch (error) {
+      console.log("error", error);
+    }
   };
 
   const deleteWatchlist = async (watchlistId) => {};

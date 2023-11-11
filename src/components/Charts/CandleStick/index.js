@@ -1,24 +1,50 @@
+import { useEffect, useState } from "react";
+import "./candleStick.css";
 import ReactApexChart from "react-apexcharts";
+import { useSelector } from "react-redux";
 
-const CandleStick = ({ data }) => {
-  // Sample data for the candlestick chart
-  const series = [
-    {
-      data: data,
-    },
-  ];
+// const countTrailingZeroes = (number) => {
+//   const string = number.toString();
+//   let count = 0;
+//   let i = string.length - 1;
+//   while (string[i] == 0) {
+//     count++;
+//     i--;
+//   }
+//   return count;
+// };
+
+const CandleStick = ({ data, allHighs, allLows }) => {
+  const series = [{ data: data?.slice(Math.max(data.length - 60, 0)) }];
+  console.log("final data", data, allHighs, allLows);
+  console.log("lll", data?.slice(Math.max(data.length - 60, 0)));
 
   // Create annotations for "H" and "L" labels
-  const annotations = series[0].data.map((dataPoint, index) => ({
+  const annotations = series[0]?.data?.map((dataPoint, index) => ({
     x: dataPoint.x.getTime(),
-    y: index % 2 === 0 ? dataPoint.y[2] : dataPoint.y[0],
+    y: allHighs?.includes(index)
+      ? dataPoint.y[0]
+      : allLows?.includes(index)
+      ? dataPoint.y[2]
+      : "",
     label: {
       borderColor: "none",
       style: {
         background: "transparent",
+        fontWeight: "bold",
+        fontSize: "12px",
       },
-      text: index % 2 === 0 ? "L" : "H",
-      offsetY: index % 2 === 0 ? 25 : -25,
+      cssClass: "annotation-label",
+      text: allHighs?.includes(index)
+        ? "H"
+        : allLows?.includes(index)
+        ? "L"
+        : "",
+      offsetY: allHighs?.includes(index)
+        ? -6
+        : allLows?.includes(index)
+        ? 28
+        : 0,
     },
   }));
 
@@ -39,7 +65,7 @@ const CandleStick = ({ data }) => {
     //   opposite: true,
     // },
     annotations: {
-      points: annotations, // Add the annotations here
+      points: annotations,
     },
     plotOptions: {
       candlestick: {

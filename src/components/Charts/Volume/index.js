@@ -17,6 +17,22 @@ const Volume = ({ data }) => {
     xaxis: {
       type: "datetime",
     },
+    yaxis: {
+      labels: {
+        formatter: function (value) {
+          const decimal =
+            value.toString()?.length >= 6
+              ? 1000000
+              : value.toString()?.length >= 3
+              ? 1000
+              : 1;
+          const newValue = value / decimal;
+          return `${newValue?.toFixed(1)}${
+            decimal === 1000 ? "K" : decimal === 1000000 ? "M" : ""
+          }`;
+        },
+      },
+    },
     dataLabels: {
       enabled: false, // Hide data labels for the volume chart
     },
@@ -32,7 +48,6 @@ const Volume = ({ data }) => {
           show: true,
         },
       },
-      borderColor: "#cccccc",
     },
   };
 
