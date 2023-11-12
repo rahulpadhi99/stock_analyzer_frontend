@@ -203,7 +203,7 @@ const Watchlist = () => {
   useEffect(() => {
     getAllWatchlist();
     getAllSymbollist();
-  }, []);
+  }, [userId]);
 
   return (
     <Box className="watchlist-container">
