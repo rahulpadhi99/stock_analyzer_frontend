@@ -201,8 +201,10 @@ const Watchlist = () => {
   };
 
   useEffect(() => {
-    getAllWatchlist();
-    getAllSymbollist();
+    if(userId){
+      getAllWatchlist();
+      getAllSymbollist();
+    } 
   }, [userId]);
 
   return (
