@@ -16,8 +16,6 @@ import { useSelector } from "react-redux";
 
 const CandleStick = ({ data, allHighs, allLows }) => {
   const series = [{ data: data?.slice(Math.max(data.length - 60, 0)) }];
-  console.log("final data", data, allHighs, allLows);
-  console.log("lll", data?.slice(Math.max(data.length - 60, 0)));
 
   // Create annotations for "H" and "L" labels
   const annotations = series[0]?.data?.map((dataPoint, index) => ({

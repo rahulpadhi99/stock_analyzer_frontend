@@ -1,11 +1,8 @@
 import ReactApexChart from "react-apexcharts";
 
 const Volume = ({ data }) => {
-  const series = [
-    {
-      data: data,
-    },
-  ];
+  const series = [{ data: data?.slice(Math.max(data.length - 60, 0)) }];
+
 
   const options = {
     chart: {
